@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { useAccount, useSwitchChain } from "wagmi";
 import type { FarmConfig } from "@/lib/farms";
 
 type NavbarProps = {
@@ -9,45 +8,9 @@ type NavbarProps = {
   farms: FarmConfig[];
 };
 
-function getNetworkLabel(farm: FarmConfig) {
-  if (farm.chainId === 8453) {
-    return "Base";
-  }
-
-  if (farm.chainId === 56) {
-    return "BNB";
-  }
-
-  return farm.chainName;
-}
-
 export function Navbar({ currentPath, onNavigate, farms }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const { isConnected, chain } = useAccount();
-  const { switchChainAsync } = useSwitchChain();
-
-  const activeFarm = farms.find((farm) => farm.route === currentPath) ?? null;
-  const selectedNetwork = activeFarm?.slug ?? "";
-
-  async function handleNetworkChange(nextSlug: string) {
-    const nextFarm = farms.find((farm) => farm.slug === nextSlug);
-    if (!nextFarm) {
-      return;
-    }
-
-    onNavigate(nextFarm.route);
-
-    if (!isConnected || chain?.id === nextFarm.chainId || !switchChainAsync) {
-      return;
-    }
-
-    try {
-      await switchChainAsync({ chainId: nextFarm.chainId });
-    } catch (error) {
-      console.error(`Failed to switch wallet to ${nextFarm.chainName}.`, error);
-    }
-  }
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
@@ -82,32 +45,16 @@ export function Navbar({ currentPath, onNavigate, farms }: NavbarProps) {
         </button>
 
         <nav className="flex items-center gap-2 text-sm text-slate-100 sm:gap-3">
-          <label className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-slate-200 sm:gap-3">
-            <span className="hidden text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400 sm:inline">
-              Network
+          <div
+            className="flex items-center gap-2 rounded-full border border-blue-300/20 bg-blue-500/10 px-3 py-2 text-blue-100"
+            aria-label="Connected to Base network"
+          >
+            <span className="h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_12px_rgba(96,165,250,0.9)]" />
+            <span className="hidden text-[11px] font-semibold uppercase tracking-[0.18em] sm:inline">
+              Connected to
             </span>
-            <select
-              aria-label="Select network"
-              value={selectedNetwork}
-              onChange={(event) => {
-                void handleNetworkChange(event.target.value);
-              }}
-              className="min-w-[4.5rem] bg-transparent text-sm font-medium text-white outline-none sm:min-w-[7rem]"
-            >
-              <option value="" disabled className="bg-slate-950 text-slate-300">
-                Select
-              </option>
-              {farms.map((farm) => (
-                <option
-                  key={farm.slug}
-                  value={farm.slug}
-                  className="bg-slate-950 text-slate-100"
-                >
-                  {getNetworkLabel(farm)}
-                </option>
-              ))}
-            </select>
-          </label>
+            <span className="font-semibold">Base</span>
+          </div>
           <button
             type="button"
             onClick={() => onNavigate("/")}
@@ -145,7 +92,7 @@ export function Navbar({ currentPath, onNavigate, farms }: NavbarProps) {
                       type="button"
                       onClick={() => {
                         setMenuOpen(false);
-                        void handleNetworkChange(farm.slug);
+                        onNavigate(farm.route);
                       }}
                       className={`w-full rounded-2xl px-4 py-3 text-left text-sm uppercase tracking-[0.18em] transition ${
                         active
