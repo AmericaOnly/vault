@@ -56,7 +56,7 @@ export function LandingPage({ farms, farmSummaries, onNavigateToFarm }: LandingP
                   Put your TAOT liquidity to work.
                 </h1>
                 <p className="mt-5 max-w-2xl text-base leading-8 text-slate-200/85 sm:text-lg">
-                  Add TAOT/WETH liquidity on Base, stake your LP tokens, and earn TAOT rewards from one streamlined dashboard.
+                  Add TAOT/USDC liquidity on Base, stake your LP tokens, and earn TAOT rewards from one streamlined dashboard.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <div className="farm-landing-pill">
