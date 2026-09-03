@@ -5,7 +5,7 @@ import { base } from "wagmi/chains";
 
 const baseRpcUrl = import.meta.env.VITE_BASE_RPC_URL?.trim() || undefined;
 export const wagmiConfig = getDefaultConfig({
-  appName: "TAOT Farm",
+  appName: "TAOT Vault",
   appDescription: "Stake TAOT/USDC liquidity and earn TAOT rewards on Base.",
   appUrl: "https://buytaot.com/",
   projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || "YOUR_WALLETCONNECT_PROJECT_ID",

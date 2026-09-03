@@ -7,7 +7,7 @@ function getNumberEnv(name: string, fallback: number) { const raw = import.meta.
 function getBooleanEnv(name: string, fallback: boolean) { const value = import.meta.env[name]?.trim().toLowerCase(); return value === "true" ? true : value === "false" ? false : fallback; }
 
 const defaults: FarmConfig = {
-  slug: "taot", route: "/farm/taot", routerKind: "aerodromeV2", chainId: 8453, chainName: "Base Network",
+  slug: "taot", route: "/vault/taot", routerKind: "aerodromeV2", chainId: 8453, chainName: "Base Network",
   projectName: "TAOT", projectTicker: "TAOT", tokenSymbol: "TAOT",
   tokenAddress: "0x7f2f00e54dcaa8b248bdfd75da2ae859d4d8ff3e",
   quoteTokenSymbol: "USDC", quoteTokenAddress: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", quoteTokenDecimals: 6,
@@ -15,7 +15,7 @@ const defaults: FarmConfig = {
   lpTokenAddress: "0xYourTaotLpTokenAddressHere", v2RouterAddress: "0xYourTaotV2RouterAddressHere",
   v2PoolAddress: "0xYourTaotPoolAddressHere", poolStable: false, liquiditySlippageBps: 100,
   liquidityDeadlineMinutes: 20, tokenDecimals: 18, lpDecimals: 18,
-  theme: { key: "taot", route: "/farm/taot", backgroundClassName: "farm-dashboard-theme-taot", panelClassName: "farm-section-shell", sectionClassName: "farm-section-shell" },
+  theme: { key: "taot", route: "/vault/taot", backgroundClassName: "farm-dashboard-theme-taot", panelClassName: "farm-section-shell", sectionClassName: "farm-section-shell" },
 };
 
 const taotFarm: FarmConfig = {

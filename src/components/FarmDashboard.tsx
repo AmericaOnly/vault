@@ -29,7 +29,7 @@ export function FarmDashboard() {
         <div className="grid gap-4 md:grid-cols-[1.4fr_0.6fr]">
           <WalletActions
             chainName={farmConfig.chainName}
-            title={`${farmConfig.projectName} Farm`}
+            title={`${farmConfig.projectName} Vault`}
             description={`Add liquidity, stake your ${farmConfig.lpSymbol}, and earn ${farmConfig.tokenSymbol} rewards over time.`}
             busy={farm.busy}
             connected={Boolean(farm.account)}
@@ -116,10 +116,10 @@ export function FarmDashboard() {
 
         <div className={farmConfig.theme.sectionClassName}>
           <div className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-slate-100/92">
-            Farm Performance
+            Vault Performance
           </div>
           <div className="mb-5 max-w-3xl text-sm text-slate-200/80">
-            Track your wallet LP tokens staked in the farm and your earned rewards from staking,
+            Track your wallet LP tokens staked in the vault and your earned rewards from staking,
             updated roughly every 10 seconds.
           </div>
         </div>
@@ -128,7 +128,7 @@ export function FarmDashboard() {
             icon={<Droplets className="h-5 w-5" />}
             title="Staked LP"
             value={formatUnitsSafe(farm.stakedBalance, farmConfig.lpDecimals)}
-            subtitle="Deposited in farm"
+            subtitle="Deposited in vault"
             delay={0}
           />
           <MetricCard
@@ -149,7 +149,7 @@ export function FarmDashboard() {
             Once your LP is staked, your staked LP and earned rewards balances update here. You
             can claim {farmConfig.tokenSymbol} rewards as often as you like without withdrawing
             your staked LP, and your position will continue earning after each claim. If you want
-            to fully exit, first withdraw your LP tokens from the farm here, then proceed to the
+            to fully exit, first withdraw your LP tokens from the vault here, then proceed to the
             final step to remove liquidity and receive your underlying tokens back.
           </div>
         </div>
@@ -189,7 +189,7 @@ export function FarmDashboard() {
               secondaryDisabled={farm.busy || !farm.account}
               primaryVariant="default"
               secondaryVariant="secondary"
-              footerActionLabel="Exit Farm"
+              footerActionLabel="Exit Vault"
               onFooterAction={farm.exitFarm}
               footerDisabled={farm.busy || !farm.account}
             />

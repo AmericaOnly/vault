@@ -76,7 +76,7 @@ export function Navbar({ currentPath, onNavigate, farms }: NavbarProps) {
               BuyTAOT.com
             </span>
             <span className="block text-lg font-semibold tracking-tight text-white">
-              TAOT Farm
+              TAOT Vault
             </span>
           </span>
         </button>
@@ -124,7 +124,7 @@ export function Navbar({ currentPath, onNavigate, farms }: NavbarProps) {
               type="button"
               onClick={() => setMenuOpen((open) => !open)}
               className={`flex items-center gap-2 rounded-full px-4 py-2 transition ${
-                currentPath.startsWith("/farm/")
+                currentPath.startsWith("/vault/")
                   ? "bg-white/12 text-white"
                   : "text-slate-300 hover:bg-white/8 hover:text-white"
               }`}

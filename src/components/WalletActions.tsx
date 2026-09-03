@@ -33,7 +33,7 @@ export function WalletActions({
         <div className="pointer-events-none absolute right-0 top-0 h-52 w-52 rounded-full bg-[var(--farm-orb-right)] blur-3xl" />
         <CardHeader className="relative space-y-4">
           <div className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--farm-muted-accent)]">
-            {farmConfig.projectName} Yield Farm
+            {farmConfig.projectName} Yield Vault
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Badge className="gap-2">
@@ -41,7 +41,7 @@ export function WalletActions({
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
               </span>
-              Live Farm
+              Live Vault
             </Badge>
             <Badge variant="secondary">{chainName}</Badge>
           </div>
@@ -70,7 +70,7 @@ export function WalletActions({
             <div className="farm-hero-detail-card">
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300/80">
                 <Waves className="h-4 w-4 text-[var(--farm-accent-text)]" />
-                Farm
+                Vault
               </div>
               <div className="mt-2 text-sm text-slate-100">Stake LP positions and harvest rewards over time.</div>
             </div>

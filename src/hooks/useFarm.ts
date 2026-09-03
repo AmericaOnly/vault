@@ -844,7 +844,7 @@ export function useFarm(): FarmState {
 
     try {
       setBusy(true);
-      setStatus("Exiting farm: withdrawing LP and claiming rewards...");
+      setStatus("Exiting vault: withdrawing LP and claiming rewards...");
       const tx = await rewardsWrite.exit();
       await waitForConfirmedTransaction(tx, provider);
       setStatus("Exit confirmed.");

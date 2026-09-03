@@ -48,7 +48,7 @@ export function LandingPage({ farms, farmSummaries, onNavigateToFarm }: LandingP
               <div className="relative z-[1] flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-slate-300/80">
                 <div className="farm-landing-eyebrow farm-landing-eyebrow-inline">
                   <img className="h-5 w-5 rounded-full" src={`${import.meta.env.BASE_URL}images/taot.png`} alt="" />
-                  TAOT Liquidity Farm
+                  TAOT Liquidity Vault
                 </div>
               </div>
               <div className="farm-landing-inner-card relative z-[1] mt-4">
@@ -97,7 +97,7 @@ export function LandingPage({ farms, farmSummaries, onNavigateToFarm }: LandingP
                       Clear Status
                     </div>
                     <div className="mt-2 text-sm leading-6 text-slate-200/80">
-                      Each farm reads the contract directly and shows the current status.
+                      The vault reads the contract directly and shows the current status.
                     </div>
                   </div>
                 </div>
@@ -112,7 +112,7 @@ export function LandingPage({ farms, farmSummaries, onNavigateToFarm }: LandingP
                       }`}
                     >
                       <span>
-                        Open {farm.projectName} Farm
+                        Open {farm.projectName} Vault
                         <ArrowRight className="ml-2 inline h-4 w-4" />
                       </span>
                     </button>
@@ -132,7 +132,7 @@ export function LandingPage({ farms, farmSummaries, onNavigateToFarm }: LandingP
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-400 shadow-[0_0_16px_rgba(74,222,128,0.8)]" />
               </span>
-              Active Farms
+              Active Vaults
             </div>
             <div className="relative z-[1] mt-4 grid gap-4">
               {farms.map((farm) => (
@@ -156,7 +156,7 @@ export function LandingPage({ farms, farmSummaries, onNavigateToFarm }: LandingP
                     </div>
                   </div>
                   <div className="mt-2 text-sm leading-7 text-slate-200/80">
-                    Liquidity Farm dashboard for the {farm.tokenSymbol}/
+                    Liquidity vault dashboard for the {farm.tokenSymbol}/
                     {farm.quoteTokenSymbol} LP.
                   </div>
                   <div className="mt-5 grid gap-3 sm:grid-cols-3">
@@ -205,7 +205,7 @@ export function LandingPage({ farms, farmSummaries, onNavigateToFarm }: LandingP
                   </div>
                   <div className="farm-landing-address-list mt-5">
                     <div className="farm-landing-address-row">
-                      <span>Farm Contract</span>
+                      <span>Vault Contract</span>
                       <span>{formatAddress(farm.rewardsContractAddress)}</span>
                     </div>
                     <div className="farm-landing-address-row">
@@ -221,7 +221,7 @@ export function LandingPage({ farms, farmSummaries, onNavigateToFarm }: LandingP
                     }`}
                   >
                     <span>
-                      Enter Farm
+                      Enter Vault
                       <ArrowRight className="ml-2 inline h-4 w-4" />
                     </span>
                   </button>
