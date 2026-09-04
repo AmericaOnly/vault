@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Coins, Droplets, Gift } from "lucide-react";
+import { ArrowDown, Coins, Droplets, Gift } from "lucide-react";
 import { LiquidityPanel } from "@/components/LiquidityPanel";
 import { MetricCard } from "@/components/MetricCard";
 import { ProgramInfoCard } from "@/components/ProgramInfoCard";
@@ -18,6 +19,17 @@ import {
 export function FarmDashboard() {
   const farmConfig = useFarmConfig();
   const farm = useFarm();
+
+  useEffect(() => {
+    if (farm.liquidityAddedCount === 0) {
+      return;
+    }
+
+    document.getElementById("stake-lp")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [farm.liquidityAddedCount]);
 
   return (
     <div className={`farm-dashboard-shell min-h-screen min-h-[calc(var(--app-height,1vh)*100)] overflow-x-hidden px-4 pb-6 pt-28 text-slate-100 sm:px-6 sm:pb-8 sm:pt-32 md:px-10 md:pb-10 ${farmConfig.theme.backgroundClassName}`}>
@@ -153,7 +165,18 @@ export function FarmDashboard() {
             final step to remove liquidity and receive your underlying tokens back.
           </div>
         </div>
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div id="stake-lp" className="scroll-mt-28">
+          {farm.liquidityAddedCount > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-4 flex items-center justify-center gap-2 rounded-[24px] border border-blue-200/25 bg-blue-300/10 px-4 py-4 text-center text-sm font-semibold text-blue-50"
+            >
+              <ArrowDown className="h-4 w-4 shrink-0" />
+              Liquidity added successfully. Please continue below to stake your LP tokens.
+            </motion.div>
+          )}
+          <div className="grid gap-6 lg:grid-cols-2">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <StakePanel
               title="Stake LP"
@@ -194,6 +217,7 @@ export function FarmDashboard() {
               footerDisabled={farm.busy || !farm.account}
             />
           </motion.div>
+          </div>
         </div>
 
         <StatusAlert status={farm.status} />

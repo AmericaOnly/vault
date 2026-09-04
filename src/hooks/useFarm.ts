@@ -27,6 +27,7 @@ export type FarmState = {
   account: string;
   status: string;
   busy: boolean;
+  liquidityAddedCount: number;
   walletLpBalance: bigint;
   walletTokenBalance: bigint;
   walletQuoteTokenBalance: bigint;
@@ -181,6 +182,7 @@ export function useFarm(): FarmState {
   const [account, setAccount] = useState("");
   const [status, setStatus] = useState("Connect your wallet to begin.");
   const [busy, setBusy] = useState(false);
+  const [liquidityAddedCount, setLiquidityAddedCount] = useState(0);
 
   const [walletLpBalance, setWalletLpBalance] = useState(0n);
   const [walletTokenBalance, setWalletTokenBalance] = useState(0n);
@@ -655,6 +657,7 @@ export function useFarm(): FarmState {
       setLiquidityTokenInput("");
       setLiquidityQuoteInput("");
       await refreshData();
+      setLiquidityAddedCount((count) => count + 1);
     } catch (error) {
       setStatus(formatStatusError(error, "Add liquidity failed."));
     } finally {
@@ -986,6 +989,7 @@ export function useFarm(): FarmState {
     account,
     status,
     busy,
+    liquidityAddedCount,
     walletLpBalance,
     walletTokenBalance,
     walletQuoteTokenBalance,
