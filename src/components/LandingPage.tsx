@@ -10,27 +10,20 @@ import {
   Sparkles,
   TimerReset,
 } from "lucide-react";
-import type { LandingFarmSummary } from "@/hooks/useLandingFarmSummaries";
 import type { FarmConfig } from "@/lib/farms";
-import { formatLandingRewardRate } from "@/lib/landing";
 
 type LandingPageProps = {
   farms: FarmConfig[];
-  farmSummaries: Partial<Record<FarmConfig["slug"], LandingFarmSummary>>;
   onNavigateToFarm: (path: string) => void;
 };
 
-export function LandingPage({ farms, farmSummaries, onNavigateToFarm }: LandingPageProps) {
+export function LandingPage({ farms, onNavigateToFarm }: LandingPageProps) {
   function formatAddress(address: string) {
     if (address.length < 12) {
       return address;
     }
 
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
-  }
-
-  function getRewardRateLabel(farm: FarmConfig) {
-    return formatLandingRewardRate(farm, farmSummaries[farm.slug]);
   }
 
   return (
@@ -189,17 +182,17 @@ export function LandingPage({ farms, farmSummaries, onNavigateToFarm }: LandingP
                     <div className="farm-landing-mini-card farm-landing-mini-card-interactive">
                       <div className="flex items-center justify-between gap-3">
                         <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
-                          Reward Rate
+                          Reward Distribution
                         </div>
                         <div className="text-sky-200/80">
                           <Coins className="h-4 w-4" />
                         </div>
                       </div>
                       <div className="mt-2 text-sm font-medium text-white">
-                        {getRewardRateLabel(farm)}
+                        Pro rata by staked LP share
                       </div>
                       <div className="mt-1 text-xs text-slate-300/65">
-                        Current emission for stakers
+                        Your share determines your rewards
                       </div>
                     </div>
                   </div>
