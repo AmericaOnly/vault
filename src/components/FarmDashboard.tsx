@@ -53,23 +53,23 @@ export function FarmDashboard() {
               connected={Boolean(farm.account)}
               items={[
                 {
-                  label: `Approve ${farmConfig.tokenSymbol}`,
+                  label: `Approve ${farmConfig.tokenSymbol} Deposit for Vault`,
                   complete: farm.tokenAllowanceToRouter > 0n,
                 },
                 {
-                  label: `Approve ${farmConfig.quoteTokenSymbol}`,
+                  label: `Approve ${farmConfig.quoteTokenSymbol} Deposit for Vault`,
                   complete: farm.quoteTokenAllowanceToRouter > 0n,
                 },
                 {
-                  label: "Add liquidity and receive LP tokens",
+                  label: `Place ${farmConfig.tokenSymbol}/${farmConfig.quoteTokenSymbol} into Vault`,
                   complete: farm.walletLpBalance > 0n || farm.stakedBalance > 0n,
                 },
                 {
-                  label: "Approve LP token",
+                  label: "Seal the Vault",
                   complete: farm.hasApproval,
                 },
                 {
-                  label: "Stake LP tokens",
+                  label: "Start Earning Rewards",
                   complete: farm.stakedBalance > 0n,
                 },
               ]}
