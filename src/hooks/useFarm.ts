@@ -68,7 +68,6 @@ export type FarmState = {
   exitFarm: () => Promise<void>;
   fillMaxLiquidityToken: () => void;
   fillMaxRemoveLiquidity: () => void;
-  fillMaxStake: () => void;
   fillMaxWithdraw: () => void;
 };
 
@@ -166,13 +165,13 @@ export function useFarm(): FarmState {
       refetchInterval: 15000,
     },
   });
-  const { data: walletLpBalanceData } = useBalance({
+  const { data: walletLpBalanceData, refetch: refetchWalletLpBalance } = useBalance({
     address,
     chainId: farmConfig.chainId,
     token: farmConfig.lpTokenAddress as `0x${string}`,
     query: {
       enabled: Boolean(address),
-      refetchInterval: 15000,
+      refetchInterval: 30000,
     },
   });
   const [provider, setProvider] = useState<BrowserProvider | null>(null);
@@ -644,6 +643,9 @@ export function useFarm(): FarmState {
       setLiquidityQuoteInput("");
       await refreshData();
       setLiquidityAddedCount((count) => count + 1);
+      window.setTimeout(() => {
+        void refetchWalletLpBalance();
+      }, 2000);
     } catch (error) {
       setStatus(formatStatusError(error, "Add liquidity failed."));
     } finally {
@@ -658,6 +660,7 @@ export function useFarm(): FarmState {
     pairQuoteReserve,
     pairTokenReserve,
     refreshData,
+    refetchWalletLpBalance,
     v2RouterWrite,
     walletQuoteTokenBalance,
     walletTokenBalance,
@@ -845,10 +848,6 @@ export function useFarm(): FarmState {
     }
   }, [refreshData, rewardsWrite]);
 
-  const fillMaxStake = useCallback(() => {
-    setStakeInput(formatUnitsSafe(walletLpBalance, farmConfig.lpDecimals, 8));
-  }, [walletLpBalance]);
-
   const fillMaxWithdraw = useCallback(() => {
     setWithdrawInput(formatUnitsSafe(stakedBalance, farmConfig.lpDecimals, 8));
   }, [stakedBalance]);
@@ -861,6 +860,10 @@ export function useFarm(): FarmState {
 
   const fillMaxRemoveLiquidity = useCallback(() => {
     setRemoveLiquidityInput(formatUnitsSafe(walletLpBalance, farmConfig.lpDecimals, 8));
+  }, [walletLpBalance]);
+
+  useEffect(() => {
+    setStakeInput(formatUnitsSafe(walletLpBalance, farmConfig.lpDecimals, 8));
   }, [walletLpBalance]);
 
   useEffect(() => {
@@ -1000,7 +1003,6 @@ export function useFarm(): FarmState {
     exitFarm,
     fillMaxLiquidityToken,
     fillMaxRemoveLiquidity,
-    fillMaxStake,
     fillMaxWithdraw,
   };
 }

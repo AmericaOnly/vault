@@ -7,6 +7,7 @@ import { ProgramInfoCard } from "@/components/ProgramInfoCard";
 import { RemoveLiquidityPanel } from "@/components/RemoveLiquidityPanel";
 import { StakePanel } from "@/components/StakePanel";
 import { StatusAlert } from "@/components/StatusAlert";
+import { VaultChecklist } from "@/components/VaultChecklist";
 import { WalletActions } from "@/components/WalletActions";
 import { useFarm } from "@/hooks/useFarm";
 import { useFarmConfig } from "@/lib/farm-context";
@@ -47,11 +48,38 @@ export function FarmDashboard() {
             connected={Boolean(farm.account)}
             onRefresh={farm.refreshData}
           />
-          <ProgramInfoCard
-	    rewardRate={`${formatPerDay(farm.rewardRate, farmConfig.tokenDecimals)} ${farmConfig.tokenSymbol}/day`}
-            totalStaked={`${formatUnitsSafe(farm.totalStaked, farmConfig.lpDecimals)} ${farmConfig.lpSymbol}`}
-            programEnds={formatDateTime(farm.periodFinish)}
-          />
+          <div className="grid gap-4">
+            <VaultChecklist
+              connected={Boolean(farm.account)}
+              items={[
+                {
+                  label: `Approve ${farmConfig.tokenSymbol}`,
+                  complete: farm.tokenAllowanceToRouter > 0n,
+                },
+                {
+                  label: `Approve ${farmConfig.quoteTokenSymbol}`,
+                  complete: farm.quoteTokenAllowanceToRouter > 0n,
+                },
+                {
+                  label: "Add liquidity and receive LP tokens",
+                  complete: farm.walletLpBalance > 0n || farm.stakedBalance > 0n,
+                },
+                {
+                  label: "Approve LP token",
+                  complete: farm.hasApproval,
+                },
+                {
+                  label: "Stake LP tokens",
+                  complete: farm.stakedBalance > 0n,
+                },
+              ]}
+            />
+            <ProgramInfoCard
+              rewardRate={`${formatPerDay(farm.rewardRate, farmConfig.tokenDecimals)} ${farmConfig.tokenSymbol}/day`}
+              totalStaked={`${formatUnitsSafe(farm.totalStaked, farmConfig.lpDecimals)} ${farmConfig.lpSymbol}`}
+              programEnds={formatDateTime(farm.periodFinish)}
+            />
+          </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -113,7 +141,6 @@ export function FarmDashboard() {
               label="Amount to stake"
               value={farm.stakeInput}
               onValueChange={farm.setStakeInput}
-              onMax={farm.fillMaxStake}
               primaryActionLabel="Step 2. Stake LP"
               secondaryActionLabel={farm.hasApproval ? "Step 1. LP Approved" : "Step 1. Approve LP"}
               onPrimaryAction={farm.stakeLp}

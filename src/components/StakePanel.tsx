@@ -7,7 +7,7 @@ type StakePanelProps = {
   label: string;
   value: string;
   onValueChange: (value: string) => void;
-  onMax: () => void;
+  onMax?: () => void;
   primaryActionLabel: string;
   secondaryActionLabel?: string;
   onPrimaryAction: () => Promise<void>;
@@ -47,11 +47,13 @@ export function StakePanel({
       <CardContent className="grid gap-4">
         <div className="grid gap-2">
           <label className="text-sm text-slate-200">{label}</label>
-          <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+          <div className={onMax ? "grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]" : "grid gap-2"}>
             <Input value={value} onChange={(event) => onValueChange(event.target.value)} placeholder="0.0" />
-            <Button variant="secondary" onClick={onMax} className="w-full sm:w-auto">
-              Max
-            </Button>
+            {onMax ? (
+              <Button variant="secondary" onClick={onMax} className="w-full sm:w-auto">
+                Max
+              </Button>
+            ) : null}
           </div>
         </div>
 
