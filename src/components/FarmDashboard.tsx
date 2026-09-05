@@ -164,15 +164,11 @@ export function FarmDashboard() {
             animate={{ opacity: 1, y: 0, transition: { delay: 0.05 } }}
           >
             <StakePanel
-              title="Withdraw / Claim"
-              primaryActionLabel={`Claim ${farmConfig.tokenSymbol} Rewards only`}
-              secondaryActionLabel="Withdraw Entire Vault Step 1"
+              title="Claim Rewards Only"
+              primaryActionLabel={`Claim ${farmConfig.tokenSymbol} Rewards Only`}
               onPrimaryAction={farm.claimRewards}
-              onSecondaryAction={farm.withdrawLp}
               primaryDisabled={farm.busy || !farm.account}
-              secondaryDisabled={farm.busy || !farm.account}
               primaryVariant="default"
-              secondaryVariant="secondary"
             />
           </motion.div>
           </div>
@@ -184,6 +180,7 @@ export function FarmDashboard() {
           busy={farm.busy}
           connected={Boolean(farm.account)}
           hasApproval={farm.hasRemoveLiquidityApproval}
+          onWithdraw={farm.withdrawLp}
           onApprove={farm.approveLpForRouter}
           onRemove={farm.removeLiquidity}
         />

@@ -45,7 +45,6 @@ export type FarmState = {
   pairLiquiditySupply: bigint;
   liquidityTokenInput: string;
   liquidityQuoteInput: string;
-  stakeInput: string;
   hasApproval: boolean;
   hasLiquidityTokenApproval: boolean;
   hasLiquidityQuoteApproval: boolean;
@@ -192,7 +191,6 @@ export function useFarm(): FarmState {
 
   const [liquidityTokenInput, setLiquidityTokenInput] = useState("");
   const [liquidityQuoteInput, setLiquidityQuoteInput] = useState("");
-  const [stakeInput, setStakeInput] = useState("");
 
   const rewardsRead = useMemo(
     () => (provider ? getRewardsReadContract(provider, farmConfig) : null),
@@ -733,32 +731,33 @@ export function useFarm(): FarmState {
   ]);
 
   const stakeLp = useCallback(async () => {
-    if (!rewardsWrite) {
+    if (!rewardsWrite || !lpRead || !account) {
       setStatus("Connect wallet first.");
       return;
     }
 
     try {
-      const amount = parseInputToUnits(stakeInput, farmConfig.lpDecimals);
+      setBusy(true);
+      setStatus("Checking your LP balance...");
+      const amount = await lpRead.balanceOf(account);
+      setWalletLpBalance(amount);
 
       if (amount <= 0n) {
-        setStatus("Enter a valid LP amount to stake.");
+        setStatus("No LP tokens are available to stake yet. Refresh and try again after liquidity is confirmed.");
         return;
       }
 
-      setBusy(true);
       setStatus("Submitting stake transaction...");
       const tx = await rewardsWrite.stake(amount);
       await waitForConfirmedTransaction(tx, provider);
       setStatus("Stake confirmed.");
-      setStakeInput("");
       await refreshData();
     } catch (error) {
       setStatus(formatStatusError(error, "Stake failed."));
     } finally {
       setBusy(false);
     }
-  }, [refreshData, rewardsWrite, stakeInput]);
+  }, [account, lpRead, refreshData, rewardsWrite]);
 
   const withdrawLp = useCallback(async () => {
     if (!rewardsWrite) {
@@ -813,10 +812,6 @@ export function useFarm(): FarmState {
 
     setLiquidityTokenInput(formatUnitsSafe(walletTokenBalance, farmConfig.tokenDecimals, 8));
   }, [account, walletTokenBalance]);
-
-  useEffect(() => {
-    setStakeInput(formatUnitsSafe(walletLpBalance, farmConfig.lpDecimals, 8));
-  }, [walletLpBalance]);
 
   useEffect(() => {
     if (isOnFarmChain) {
@@ -932,7 +927,6 @@ export function useFarm(): FarmState {
     pairLiquiditySupply,
     liquidityTokenInput,
     liquidityQuoteInput,
-    stakeInput,
     hasApproval,
     hasLiquidityTokenApproval,
     hasLiquidityQuoteApproval,

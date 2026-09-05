@@ -53,7 +53,7 @@ export function StakePanel({
           </div>
         ) : null}
 
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className={secondaryActionLabel && onSecondaryAction ? "grid gap-2 sm:grid-cols-2" : "grid gap-2"}>
           {secondaryActionLabel && onSecondaryAction ? (
             <Button
               onClick={onSecondaryAction}
