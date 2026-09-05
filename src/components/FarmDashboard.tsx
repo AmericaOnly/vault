@@ -71,15 +71,6 @@ export function FarmDashboard() {
           />
         </div>
 
-        <div className={farmConfig.theme.sectionClassName}>
-          <div className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-slate-100/92">
-            Liquidity Flow
-          </div>
-          <div className="mb-5 max-w-3xl text-sm text-slate-200/80">
-            Approve both assets, add liquidity to the {farmConfig.tokenSymbol} pool, then stake
-            those new wallet LP tokens below.
-          </div>
-        </div>
         <div id="add-liquidity">
           <LiquidityPanel
             tokenSymbol={farmConfig.tokenSymbol}
