@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { ArrowDown, Gift, Lock, LockOpen } from "lucide-react";
 import { LiquidityPanel } from "@/components/LiquidityPanel";
 import { MetricCard } from "@/components/MetricCard";
-import { ProgramInfoCard } from "@/components/ProgramInfoCard";
 import { RemoveLiquidityPanel } from "@/components/RemoveLiquidityPanel";
 import { StakePanel } from "@/components/StakePanel";
 import { StatusAlert } from "@/components/StatusAlert";
@@ -11,11 +10,7 @@ import { VaultChecklist } from "@/components/VaultChecklist";
 import { WalletActions } from "@/components/WalletActions";
 import { useFarm } from "@/hooks/useFarm";
 import { useFarmConfig } from "@/lib/farm-context";
-import {
-  formatDateTime,
-  formatPerDay,
-  formatUnitsSafe,
-} from "@/lib/format";
+import { formatUnitsSafe } from "@/lib/format";
 
 export function FarmDashboard() {
   const farmConfig = useFarmConfig();
@@ -79,11 +74,6 @@ export function FarmDashboard() {
                   complete: farm.stakedBalance > 0n,
                 },
               ]}
-            />
-            <ProgramInfoCard
-              rewardRate={`${formatPerDay(farm.rewardRate, farmConfig.tokenDecimals)} ${farmConfig.tokenSymbol}/day`}
-              totalStaked={`${formatUnitsSafe(farm.totalStaked, farmConfig.lpDecimals)} ${farmConfig.lpSymbol}`}
-              programEnds={formatDateTime(farm.periodFinish)}
             />
           </div>
 
