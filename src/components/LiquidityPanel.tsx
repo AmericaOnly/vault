@@ -44,11 +44,6 @@ export function LiquidityPanel({
         <div className="pointer-events-none absolute right-0 top-0 h-36 w-36 rounded-full bg-blue-200/8 blur-3xl" />
         <CardHeader>
           <CardTitle className="text-lg sm:text-xl">Part 1 - Secure the Bag and Open the Vault</CardTitle>
-          <p className="text-sm text-slate-200">
-            Here you can add to the liquidity pool, in order to get LP Stake tokens for
-            earning {tokenSymbol} rewards with. After these 3 steps are complete,
-            continue to the &quot;Stake LP&quot; section below, you&apos;re almost there!
-          </p>
           <p className="break-all text-xs text-slate-300">Pool: {poolAddress}</p>
         </CardHeader>
         <CardContent className="grid gap-4">

@@ -38,9 +38,6 @@ export function RemoveLiquidityPanel({
           <CardTitle className="text-lg sm:text-xl">
             Claim Initial {farmConfig.quoteTokenSymbol}/{farmConfig.tokenSymbol}
           </CardTitle>
-          <p className="text-sm text-slate-200">
-            Remove liquidity from your LP position to receive your underlying {farmConfig.tokenSymbol} and {farmConfig.quoteTokenSymbol} back.
-          </p>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
