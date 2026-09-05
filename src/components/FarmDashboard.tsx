@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Coins, Droplets, Gift } from "lucide-react";
+import { ArrowDown, Droplets, Gift } from "lucide-react";
 import { LiquidityPanel } from "@/components/LiquidityPanel";
 import { MetricCard } from "@/components/MetricCard";
 import { ProgramInfoCard } from "@/components/ProgramInfoCard";
@@ -54,43 +54,6 @@ export function FarmDashboard() {
           />
         </div>
 
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <div className="text-xs font-bold uppercase tracking-[0.28em] text-slate-100/92">
-              Wallet Snapshot
-            </div>
-            <div className="mt-1 text-sm text-slate-200/85">
-              Current balances for your {farmConfig.tokenSymbol}, {farmConfig.quoteTokenSymbol},
-              and LP positions.
-            </div>
-          </div>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          <MetricCard
-            icon={<Coins className="h-5 w-5" />}
-            title={`Wallet ${farmConfig.tokenSymbol}`}
-            value={formatUnitsSafe(farm.walletTokenBalance, farmConfig.tokenDecimals)}
-            subtitle={farmConfig.tokenSymbol}
-          />
-          <MetricCard
-            icon={<Coins className="h-5 w-5" />}
-            title={`Wallet ${farmConfig.quoteTokenSymbol}`}
-            value={formatUnitsSafe(
-              farm.walletQuoteTokenBalance,
-              farmConfig.quoteTokenDecimals,
-            )}
-            subtitle={farmConfig.quoteTokenSymbol}
-            delay={0.05}
-          />
-          <MetricCard
-            icon={<Coins className="h-5 w-5" />}
-            title="Wallet LP"
-            value={formatUnitsSafe(farm.walletLpBalance, farmConfig.lpDecimals)}
-            subtitle={farmConfig.lpSymbol}
-            delay={0.1}
-          />
-        </div>
-
         <div className={farmConfig.theme.sectionClassName}>
           <div className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-slate-100/92">
             Liquidity Flow
@@ -117,9 +80,7 @@ export function FarmDashboard() {
             connected={Boolean(farm.account)}
             poolAddress={farmConfig.v2PoolAddress}
             onTokenValueChange={farm.setLiquidityTokenInput}
-            onQuoteValueChange={farm.setLiquidityQuoteInput}
             onTokenMax={farm.fillMaxLiquidityToken}
-            onQuoteMax={farm.fillMaxLiquidityQuote}
             onApproveToken={farm.approveTokenForRouter}
             onApproveQuoteToken={farm.approveQuoteTokenForRouter}
             onAddLiquidity={farm.addLiquidity}

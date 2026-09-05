@@ -52,7 +52,6 @@ export type FarmState = {
   hasLiquidityQuoteApproval: boolean;
   hasRemoveLiquidityApproval: boolean;
   setLiquidityTokenInput: (value: string) => void;
-  setLiquidityQuoteInput: (value: string) => void;
   setRemoveLiquidityInput: (value: string) => void;
   setStakeInput: (value: string) => void;
   setWithdrawInput: (value: string) => void;
@@ -68,7 +67,6 @@ export type FarmState = {
   claimRewards: () => Promise<void>;
   exitFarm: () => Promise<void>;
   fillMaxLiquidityToken: () => void;
-  fillMaxLiquidityQuote: () => void;
   fillMaxRemoveLiquidity: () => void;
   fillMaxStake: () => void;
   fillMaxWithdraw: () => void;
@@ -450,25 +448,13 @@ export function useFarm(): FarmState {
     return formatUnitsSafe(quotedAmount, farmConfig.quoteTokenDecimals, 8);
   }, [pairQuoteReserve, pairTokenReserve]);
 
-  const tokenFromQuoteInput = useCallback((value: string) => {
-    const amountIn = parseInputToUnitsSafe(value, farmConfig.quoteTokenDecimals);
-    if (!value.trim() || amountIn <= 0n || pairTokenReserve <= 0n || pairQuoteReserve <= 0n) {
-      return "";
-    }
-
-    const quotedAmount = (amountIn * pairTokenReserve) / pairQuoteReserve;
-    return formatUnitsSafe(quotedAmount, farmConfig.tokenDecimals, 8);
-  }, [pairQuoteReserve, pairTokenReserve]);
-
   const handleLiquidityTokenInput = useCallback((value: string) => {
     setLiquidityTokenInput(value);
-    setLiquidityQuoteInput(quoteFromTokenInput(value));
-  }, [quoteFromTokenInput]);
+  }, []);
 
-  const handleLiquidityQuoteInput = useCallback((value: string) => {
-    setLiquidityQuoteInput(value);
-    setLiquidityTokenInput(tokenFromQuoteInput(value));
-  }, [tokenFromQuoteInput]);
+  useEffect(() => {
+    setLiquidityQuoteInput(quoteFromTokenInput(liquidityTokenInput));
+  }, [liquidityTokenInput, quoteFromTokenInput]);
 
   const hasApproval = allowance > 0n;
   const requiredTokenApproval = parseInputToUnitsSafe(
@@ -873,12 +859,6 @@ export function useFarm(): FarmState {
     setLiquidityQuoteInput(quoteFromTokenInput(nextValue));
   }, [quoteFromTokenInput, walletTokenBalance]);
 
-  const fillMaxLiquidityQuote = useCallback(() => {
-    const nextValue = formatUnitsSafe(walletQuoteTokenBalance, farmConfig.quoteTokenDecimals, 8);
-    setLiquidityQuoteInput(nextValue);
-    setLiquidityTokenInput(tokenFromQuoteInput(nextValue));
-  }, [tokenFromQuoteInput, walletQuoteTokenBalance]);
-
   const fillMaxRemoveLiquidity = useCallback(() => {
     setRemoveLiquidityInput(formatUnitsSafe(walletLpBalance, farmConfig.lpDecimals, 8));
   }, [walletLpBalance]);
@@ -914,16 +894,6 @@ export function useFarm(): FarmState {
 
     return () => window.clearInterval(interval);
   }, [account, refreshData]);
-
-  useEffect(() => {
-    if (!account) {
-      return;
-    }
-
-    const nextValue = formatUnitsSafe(walletTokenBalance, farmConfig.tokenDecimals, 8);
-    setLiquidityTokenInput(nextValue);
-    setLiquidityQuoteInput(quoteFromTokenInput(nextValue));
-  }, [account, quoteFromTokenInput, walletTokenBalance]);
 
   useEffect(() => {
     if (!isConnected || !connector || !address) {
@@ -1014,7 +984,6 @@ export function useFarm(): FarmState {
     hasLiquidityQuoteApproval,
     hasRemoveLiquidityApproval,
     setLiquidityTokenInput: handleLiquidityTokenInput,
-    setLiquidityQuoteInput: handleLiquidityQuoteInput,
     setRemoveLiquidityInput,
     setStakeInput,
     setWithdrawInput,
@@ -1030,7 +999,6 @@ export function useFarm(): FarmState {
     claimRewards,
     exitFarm,
     fillMaxLiquidityToken,
-    fillMaxLiquidityQuote,
     fillMaxRemoveLiquidity,
     fillMaxStake,
     fillMaxWithdraw,

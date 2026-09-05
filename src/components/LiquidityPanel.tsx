@@ -16,9 +16,7 @@ type LiquidityPanelProps = {
   connected: boolean;
   poolAddress: string;
   onTokenValueChange: (value: string) => void;
-  onQuoteValueChange: (value: string) => void;
   onTokenMax: () => void;
-  onQuoteMax: () => void;
   onApproveToken: () => Promise<void>;
   onApproveQuoteToken: () => Promise<void>;
   onAddLiquidity: () => Promise<void>;
@@ -37,9 +35,7 @@ export function LiquidityPanel({
   connected,
   poolAddress,
   onTokenValueChange,
-  onQuoteValueChange,
   onTokenMax,
-  onQuoteMax,
   onApproveToken,
   onApproveQuoteToken,
   onAddLiquidity,
@@ -73,15 +69,15 @@ export function LiquidityPanel({
 
           <div className="grid gap-2 rounded-[24px] border border-blue-100/12 bg-white/[0.03] p-4">
             <div className="flex flex-col gap-1 text-sm text-slate-200 sm:flex-row sm:items-center sm:justify-between">
-              <label>{quoteTokenSymbol} amount</label>
+              <label>Estimated {quoteTokenSymbol} required</label>
               <span>Wallet: {quoteTokenBalance} {quoteTokenSymbol}</span>
             </div>
-            <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
-              <Input value={quoteValue} onChange={(event) => onQuoteValueChange(event.target.value)} placeholder="0.0" />
-              <Button variant="secondary" onClick={onQuoteMax} className="w-full sm:w-auto">
-                Max
-              </Button>
+            <div className="rounded-xl border border-blue-100/10 bg-slate-950/35 px-3 py-2 text-base text-slate-100">
+              {quoteValue || "Enter a TAOT amount above"}
             </div>
+            <p className="text-xs text-slate-300/75">
+              Automatically calculated from the pool&apos;s current TAOT/{quoteTokenSymbol} ratio.
+            </p>
           </div>
 
           <div className="grid gap-2 rounded-[24px] border border-blue-100/12 bg-white/[0.03] p-4 sm:grid-cols-2 lg:grid-cols-3">
