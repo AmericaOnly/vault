@@ -145,7 +145,7 @@ export function useFarm(): FarmState {
     allowFailure: true,
     query: {
       enabled: rewardsContractReady,
-      refetchInterval: 10000,
+      refetchInterval: 15000,
     },
   });
   const { data: walletTokenBalanceData } = useBalance({
@@ -154,7 +154,7 @@ export function useFarm(): FarmState {
     token: farmConfig.tokenAddress as `0x${string}`,
     query: {
       enabled: Boolean(address),
-      refetchInterval: 10000,
+      refetchInterval: 15000,
     },
   });
   const { data: walletQuoteTokenBalanceData } = useBalance({
@@ -163,7 +163,7 @@ export function useFarm(): FarmState {
     token: farmConfig.quoteTokenAddress as `0x${string}`,
     query: {
       enabled: Boolean(address),
-      refetchInterval: 10000,
+      refetchInterval: 15000,
     },
   });
   const { data: walletLpBalanceData } = useBalance({
@@ -172,7 +172,7 @@ export function useFarm(): FarmState {
     token: farmConfig.lpTokenAddress as `0x${string}`,
     query: {
       enabled: Boolean(address),
-      refetchInterval: 10000,
+      refetchInterval: 15000,
     },
   });
   const [provider, setProvider] = useState<BrowserProvider | null>(null);
@@ -890,7 +890,7 @@ export function useFarm(): FarmState {
 
     const interval = window.setInterval(() => {
       void refreshData();
-    }, 10000);
+    }, 15000);
 
     return () => window.clearInterval(interval);
   }, [account, refreshData]);

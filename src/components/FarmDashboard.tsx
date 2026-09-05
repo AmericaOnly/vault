@@ -54,15 +54,6 @@ export function FarmDashboard() {
           />
         </div>
 
-        <div className={farmConfig.theme.sectionClassName}>
-          <div className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-slate-100/92">
-            Vault Performance
-          </div>
-          <div className="mb-5 max-w-3xl text-sm text-slate-200/80">
-            Track your wallet LP tokens staked in the vault and your earned rewards from staking,
-            updated roughly every 10 seconds.
-          </div>
-        </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <MetricCard
             icon={<Droplets className="h-5 w-5" />}
@@ -75,7 +66,7 @@ export function FarmDashboard() {
             icon={<Gift className="h-5 w-5" />}
             title="Earned Rewards"
             value={formatUnitsSafe(farm.earnedRewards, farmConfig.tokenDecimals)}
-            subtitle={farmConfig.tokenSymbol}
+            subtitle={`${farmConfig.tokenSymbol} balance updates every 15 seconds`}
             delay={0.05}
           />
         </div>
@@ -113,19 +104,6 @@ export function FarmDashboard() {
           />
         </div>
 
-        <div className={farmConfig.theme.sectionClassName}>
-          <div className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-slate-100/92">
-            Position Controls
-          </div>
-          <div className="mb-5 max-w-3xl text-sm text-slate-200/80">
-            Stake LP, withdraw LP, and claim {farmConfig.tokenSymbol} rewards from one place.
-            Once your LP is staked, your staked LP and earned rewards balances update here. You
-            can claim {farmConfig.tokenSymbol} rewards as often as you like without withdrawing
-            your staked LP, and your position will continue earning after each claim. If you want
-            to fully exit, first withdraw your LP tokens from the vault here, then proceed to the
-            final step to remove liquidity and receive your underlying tokens back.
-          </div>
-        </div>
         <div id="stake-lp" className="scroll-mt-28">
           {farm.liquidityAddedCount > 0 && (
             <motion.div
