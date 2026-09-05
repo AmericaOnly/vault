@@ -140,8 +140,8 @@ export function FarmDashboard() {
               label="Amount to stake"
               value={farm.stakeInput}
               onValueChange={farm.setStakeInput}
-              primaryActionLabel="Step 2. Stake LP"
-              secondaryActionLabel={farm.hasApproval ? "Step 1. LP Approved" : "Step 1. Approve LP"}
+              primaryActionLabel="Step 2. Start Earning Rewards"
+              secondaryActionLabel={farm.hasApproval ? "Step 1. Vault Sealed" : "Step 1. Seal the Vault"}
               onPrimaryAction={farm.stakeLp}
               onSecondaryAction={farm.approveLp}
               primaryDisabled={farm.busy || !farm.account}
