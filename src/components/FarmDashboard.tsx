@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Droplets, Gift } from "lucide-react";
+import { ArrowDown, Gift, Lock, LockOpen } from "lucide-react";
 import { LiquidityPanel } from "@/components/LiquidityPanel";
 import { MetricCard } from "@/components/MetricCard";
 import { ProgramInfoCard } from "@/components/ProgramInfoCard";
@@ -90,7 +90,11 @@ export function FarmDashboard() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <MetricCard
-            icon={<Droplets className="h-5 w-5" />}
+            icon={farm.stakedBalance > 0n ? (
+              <Lock className="h-5 w-5 text-emerald-400" aria-label="Funds staked in vault" />
+            ) : (
+              <LockOpen className="h-5 w-5 text-red-400" aria-label="LP tokens not staked" />
+            )}
             title="In Your Vault"
             value={(
               <div className="grid gap-2">
