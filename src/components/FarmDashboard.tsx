@@ -136,10 +136,7 @@ export function FarmDashboard() {
           <div className="grid gap-6 lg:grid-cols-2">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <StakePanel
-              title="Part 2 - Stake LP"
-              label="Amount to stake"
-              value={farm.stakeInput}
-              onValueChange={farm.setStakeInput}
+              title="Part 2 - Seal Vault and Start Earning"
               primaryActionLabel="Step 2. Start Earning Rewards"
               secondaryActionLabel={farm.hasApproval ? "Step 1. Vault Sealed" : "Step 1. Seal the Vault"}
               onPrimaryAction={farm.stakeLp}

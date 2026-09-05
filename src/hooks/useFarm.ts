@@ -52,7 +52,6 @@ export type FarmState = {
   hasRemoveLiquidityApproval: boolean;
   setLiquidityTokenInput: (value: string) => void;
   setRemoveLiquidityInput: (value: string) => void;
-  setStakeInput: (value: string) => void;
   refreshData: () => Promise<void>;
   approveTokenForRouter: () => Promise<void>;
   approveQuoteTokenForRouter: () => Promise<void>;
@@ -957,7 +956,6 @@ export function useFarm(): FarmState {
     hasRemoveLiquidityApproval,
     setLiquidityTokenInput: handleLiquidityTokenInput,
     setRemoveLiquidityInput,
-    setStakeInput,
     refreshData,
     approveTokenForRouter,
     approveQuoteTokenForRouter,
