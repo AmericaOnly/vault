@@ -47,14 +47,14 @@ export function FarmDashboard() {
       <div className="pointer-events-none absolute inset-x-0 top-24 h-px bg-[linear-gradient(90deg,transparent,var(--farm-grid-line-strong),transparent)]" />
       <div className="pointer-events-none absolute left-[-8rem] top-32 h-64 w-64 rounded-full bg-[var(--farm-orb-left)] blur-3xl" />
       <div className="pointer-events-none absolute right-[-6rem] top-80 h-72 w-72 rounded-full bg-[var(--farm-orb-right)] blur-3xl" />
-      <div className="relative mx-auto grid max-w-6xl gap-4 sm:gap-6">
-        <div className="grid gap-4 md:grid-cols-[1.4fr_0.6fr]">
+      <div className="relative mx-auto grid max-w-6xl gap-4 sm:gap-5">
+        <div className="grid gap-4 md:grid-cols-[1.4fr_0.6fr] md:grid-rows-[auto_1fr]">
           <WalletActions
             busy={farm.busy}
             connected={Boolean(farm.account)}
             onRefresh={farm.refreshData}
           />
-          <div className="grid gap-4">
+          <div className="grid gap-4 md:col-start-2 md:row-span-2 md:row-start-1 md:self-start">
             <VaultChecklist
               connected={Boolean(farm.account)}
               items={[
@@ -86,9 +86,8 @@ export function FarmDashboard() {
               programEnds={formatDateTime(farm.periodFinish)}
             />
           </div>
-        </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:col-start-1 md:row-start-2 md:grid-cols-2">
           <MetricCard
             icon={farm.stakedBalance > 0n ? (
               <Lock className="h-5 w-5 text-emerald-400" aria-label="Funds staked in vault" />
@@ -119,6 +118,7 @@ export function FarmDashboard() {
             delay={0.05}
           />
         </div>
+        </div>
 
         <div id="add-liquidity">
           <LiquidityPanel
@@ -133,6 +133,7 @@ export function FarmDashboard() {
             quoteValue={farm.liquidityQuoteInput}
             hasTokenApproval={farm.hasLiquidityTokenApproval}
             hasQuoteApproval={farm.hasLiquidityQuoteApproval}
+            hasInsufficientQuoteBalance={farm.hasInsufficientQuoteBalance}
             busy={farm.busy}
             connected={Boolean(farm.account)}
             poolAddress={farmConfig.v2PoolAddress}
@@ -154,7 +155,7 @@ export function FarmDashboard() {
               Liquidity added successfully. Please continue below to stake your LP tokens.
             </motion.div>
           )}
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-2">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <StakePanel
               title="Part 2 - Seal Vault and Start Earning"

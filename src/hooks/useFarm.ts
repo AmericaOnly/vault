@@ -49,6 +49,7 @@ export type FarmState = {
   hasApproval: boolean;
   hasLiquidityTokenApproval: boolean;
   hasLiquidityQuoteApproval: boolean;
+  hasInsufficientQuoteBalance: boolean;
   hasRemoveLiquidityApproval: boolean;
   setLiquidityTokenInput: (value: string) => void;
   refreshData: () => Promise<void>;
@@ -458,6 +459,8 @@ export function useFarm(): FarmState {
     requiredTokenApproval === 0n || tokenAllowanceToRouter >= requiredTokenApproval;
   const hasLiquidityQuoteApproval =
     requiredQuoteApproval === 0n || quoteTokenAllowanceToRouter >= requiredQuoteApproval;
+  const hasInsufficientQuoteBalance =
+    requiredQuoteApproval > 0n && requiredQuoteApproval > walletQuoteTokenBalance;
   const hasLpRouterApproval = lpAllowanceToRouter > 0n;
   const hasRemoveLiquidityApproval = hasLpRouterApproval;
 
@@ -933,6 +936,7 @@ export function useFarm(): FarmState {
     hasApproval,
     hasLiquidityTokenApproval,
     hasLiquidityQuoteApproval,
+    hasInsufficientQuoteBalance,
     hasRemoveLiquidityApproval,
     setLiquidityTokenInput: handleLiquidityTokenInput,
     refreshData,

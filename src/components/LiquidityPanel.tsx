@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +13,7 @@ type LiquidityPanelProps = {
   quoteValue: string;
   hasTokenApproval: boolean;
   hasQuoteApproval: boolean;
+  hasInsufficientQuoteBalance: boolean;
   busy: boolean;
   connected: boolean;
   poolAddress: string;
@@ -30,6 +32,7 @@ export function LiquidityPanel({
   quoteValue,
   hasTokenApproval,
   hasQuoteApproval,
+  hasInsufficientQuoteBalance,
   busy,
   connected,
   poolAddress,
@@ -38,8 +41,49 @@ export function LiquidityPanel({
   onApproveQuoteToken,
   onAddLiquidity,
 }: LiquidityPanelProps) {
+  const [hasEditedTokenAmount, setHasEditedTokenAmount] = useState(false);
+  const [showInsufficientQuoteDialog, setShowInsufficientQuoteDialog] = useState(false);
+
+  useEffect(() => {
+    if (!hasEditedTokenAmount) {
+      return;
+    }
+
+    setShowInsufficientQuoteDialog(hasInsufficientQuoteBalance);
+  }, [hasEditedTokenAmount, hasInsufficientQuoteBalance]);
+
+  function handleTokenValueChange(value: string) {
+    setHasEditedTokenAmount(true);
+    onTokenValueChange(value);
+  }
+
   return (
     <motion.div id="add-liquidity" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+      {showInsufficientQuoteDialog && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 px-4 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="insufficient-usdc-title"
+        >
+          <Card className="w-full max-w-md border-red-300/25">
+            <CardHeader>
+              <CardTitle id="insufficient-usdc-title" className="text-xl">
+                Not Enough {quoteTokenSymbol}
+              </CardTitle>
+              <p className="text-sm leading-6 text-slate-200">
+                This {tokenSymbol} amount requires approximately {quoteValue} {quoteTokenSymbol},
+                but your wallet has {quoteTokenBalance} {quoteTokenSymbol}. Enter a smaller {tokenSymbol} amount.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <Button className="w-full" onClick={() => setShowInsufficientQuoteDialog(false)}>
+                Got It
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      )}
       <Card className="relative overflow-hidden">
         <div className="pointer-events-none absolute right-0 top-0 h-36 w-36 rounded-full bg-blue-200/8 blur-3xl" />
         <CardHeader>
@@ -53,7 +97,7 @@ export function LiquidityPanel({
               <span>Wallet: {tokenBalance} {tokenSymbol}</span>
             </div>
             <div className="grid gap-2">
-              <Input value={tokenValue} onChange={(event) => onTokenValueChange(event.target.value)} placeholder="0.0" />
+              <Input value={tokenValue} onChange={(event) => handleTokenValueChange(event.target.value)} placeholder="0.0" />
             </div>
           </div>
 
