@@ -16,7 +16,6 @@ type LiquidityPanelProps = {
   connected: boolean;
   poolAddress: string;
   onTokenValueChange: (value: string) => void;
-  onTokenMax: () => void;
   onApproveToken: () => Promise<void>;
   onApproveQuoteToken: () => Promise<void>;
   onAddLiquidity: () => Promise<void>;
@@ -35,7 +34,6 @@ export function LiquidityPanel({
   connected,
   poolAddress,
   onTokenValueChange,
-  onTokenMax,
   onApproveToken,
   onApproveQuoteToken,
   onAddLiquidity,
@@ -59,11 +57,8 @@ export function LiquidityPanel({
               <label>{tokenSymbol} amount</label>
               <span>Wallet: {tokenBalance} {tokenSymbol}</span>
             </div>
-            <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+            <div className="grid gap-2">
               <Input value={tokenValue} onChange={(event) => onTokenValueChange(event.target.value)} placeholder="0.0" />
-              <Button variant="secondary" onClick={onTokenMax} className="w-full sm:w-auto">
-                Max
-              </Button>
             </div>
           </div>
 

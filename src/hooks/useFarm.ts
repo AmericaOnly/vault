@@ -66,7 +66,6 @@ export type FarmState = {
   withdrawLp: () => Promise<void>;
   claimRewards: () => Promise<void>;
   exitFarm: () => Promise<void>;
-  fillMaxLiquidityToken: () => void;
   fillMaxRemoveLiquidity: () => void;
   fillMaxWithdraw: () => void;
 };
@@ -852,15 +851,17 @@ export function useFarm(): FarmState {
     setWithdrawInput(formatUnitsSafe(stakedBalance, farmConfig.lpDecimals, 8));
   }, [stakedBalance]);
 
-  const fillMaxLiquidityToken = useCallback(() => {
-    const nextValue = formatUnitsSafe(walletTokenBalance, farmConfig.tokenDecimals, 8);
-    setLiquidityTokenInput(nextValue);
-    setLiquidityQuoteInput(quoteFromTokenInput(nextValue));
-  }, [quoteFromTokenInput, walletTokenBalance]);
-
   const fillMaxRemoveLiquidity = useCallback(() => {
     setRemoveLiquidityInput(formatUnitsSafe(walletLpBalance, farmConfig.lpDecimals, 8));
   }, [walletLpBalance]);
+
+  useEffect(() => {
+    if (!account) {
+      return;
+    }
+
+    setLiquidityTokenInput(formatUnitsSafe(walletTokenBalance, farmConfig.tokenDecimals, 8));
+  }, [account, walletTokenBalance]);
 
   useEffect(() => {
     setStakeInput(formatUnitsSafe(walletLpBalance, farmConfig.lpDecimals, 8));
@@ -1001,7 +1002,6 @@ export function useFarm(): FarmState {
     withdrawLp,
     claimRewards,
     exitFarm,
-    fillMaxLiquidityToken,
     fillMaxRemoveLiquidity,
     fillMaxWithdraw,
   };

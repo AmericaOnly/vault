@@ -116,7 +116,6 @@ export function FarmDashboard() {
             connected={Boolean(farm.account)}
             poolAddress={farmConfig.v2PoolAddress}
             onTokenValueChange={farm.setLiquidityTokenInput}
-            onTokenMax={farm.fillMaxLiquidityToken}
             onApproveToken={farm.approveTokenForRouter}
             onApproveQuoteToken={farm.approveQuoteTokenForRouter}
             onAddLiquidity={farm.addLiquidity}

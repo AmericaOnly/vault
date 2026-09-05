@@ -45,6 +45,21 @@ export function LandingPage({ farms, onNavigateToFarm }: LandingPageProps) {
                 </div>
               </div>
               <div className="farm-landing-inner-card relative z-[1] mt-4">
+                <div className="mb-6 flex flex-wrap gap-3">
+                  {farms.map((farm) => (
+                    <button
+                      key={farm.route}
+                      type="button"
+                      onClick={() => onNavigateToFarm(farm.route)}
+                      className="farm-landing-action farm-landing-action-market"
+                    >
+                      <span>
+                        Open {farm.projectName} Vault
+                        <ArrowRight className="ml-2 inline h-4 w-4" />
+                      </span>
+                    </button>
+                  ))}
+                </div>
                 <h1 className="max-w-4xl text-4xl font-extrabold tracking-[-0.03em] text-slate-50 sm:text-5xl lg:text-6xl">
                   Put your TAOT liquidity to work.
                 </h1>
@@ -93,23 +108,6 @@ export function LandingPage({ farms, onNavigateToFarm }: LandingPageProps) {
                       The vault reads the contract directly and shows the current status.
                     </div>
                   </div>
-                </div>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  {farms.map((farm) => (
-                    <button
-                      key={farm.route}
-                      type="button"
-                      onClick={() => onNavigateToFarm(farm.route)}
-                      className={`farm-landing-action ${
-                        "farm-landing-action-market"
-                      }`}
-                    >
-                      <span>
-                        Open {farm.projectName} Vault
-                        <ArrowRight className="ml-2 inline h-4 w-4" />
-                      </span>
-                    </button>
-                  ))}
                 </div>
               </div>
             </div>
