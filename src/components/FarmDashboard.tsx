@@ -49,9 +49,6 @@ export function FarmDashboard() {
       <div className="relative mx-auto grid max-w-6xl gap-4 sm:gap-6">
         <div className="grid gap-4 md:grid-cols-[1.4fr_0.6fr]">
           <WalletActions
-            chainName={farmConfig.chainName}
-            title={`${farmConfig.projectName} Vault`}
-            description={`Add liquidity, stake your ${farmConfig.lpSymbol}, and earn ${farmConfig.tokenSymbol} rewards over time.`}
             busy={farm.busy}
             connected={Boolean(farm.account)}
             onRefresh={farm.refreshData}
