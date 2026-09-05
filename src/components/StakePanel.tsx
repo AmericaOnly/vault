@@ -4,9 +4,9 @@ import { Input } from "@/components/ui/input";
 
 type StakePanelProps = {
   title: string;
-  label: string;
-  value: string;
-  onValueChange: (value: string) => void;
+  label?: string;
+  value?: string;
+  onValueChange?: (value: string) => void;
   onMax?: () => void;
   primaryActionLabel: string;
   secondaryActionLabel?: string;
@@ -16,9 +16,6 @@ type StakePanelProps = {
   secondaryDisabled?: boolean;
   primaryVariant?: "default" | "secondary" | "outline";
   secondaryVariant?: "default" | "secondary" | "outline";
-  footerActionLabel?: string;
-  onFooterAction?: () => Promise<void>;
-  footerDisabled?: boolean;
 };
 
 export function StakePanel({
@@ -35,9 +32,6 @@ export function StakePanel({
   secondaryDisabled,
   primaryVariant = "default",
   secondaryVariant = "secondary",
-  footerActionLabel,
-  onFooterAction,
-  footerDisabled,
 }: StakePanelProps) {
   return (
     <Card>
@@ -45,17 +39,19 @@ export function StakePanel({
         <CardTitle className="text-lg sm:text-xl">{title}</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-4">
-        <div className="grid gap-2">
-          <label className="text-sm text-slate-200">{label}</label>
-          <div className={onMax ? "grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]" : "grid gap-2"}>
-            <Input value={value} onChange={(event) => onValueChange(event.target.value)} placeholder="0.0" />
+        {label && value !== undefined && onValueChange ? (
+          <div className="grid gap-2">
+            <label className="text-sm text-slate-200">{label}</label>
+            <div className={onMax ? "grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]" : "grid gap-2"}>
+              <Input value={value} onChange={(event) => onValueChange(event.target.value)} placeholder="0.0" />
             {onMax ? (
               <Button variant="secondary" onClick={onMax} className="w-full sm:w-auto">
                 Max
               </Button>
             ) : null}
+            </div>
           </div>
-        </div>
+        ) : null}
 
         <div className="grid gap-2 sm:grid-cols-2">
           {secondaryActionLabel && onSecondaryAction ? (
@@ -77,17 +73,6 @@ export function StakePanel({
             {primaryActionLabel}
           </Button>
         </div>
-
-        {footerActionLabel && onFooterAction ? (
-          <Button
-            onClick={onFooterAction}
-            disabled={footerDisabled}
-            variant="outline"
-            className="h-auto min-h-11 w-full whitespace-normal py-3 text-center"
-          >
-            {footerActionLabel}
-          </Button>
-        ) : null}
       </CardContent>
     </Card>
   );

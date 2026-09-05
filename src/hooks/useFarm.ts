@@ -46,7 +46,6 @@ export type FarmState = {
   liquidityQuoteInput: string;
   removeLiquidityInput: string;
   stakeInput: string;
-  withdrawInput: string;
   hasApproval: boolean;
   hasLiquidityTokenApproval: boolean;
   hasLiquidityQuoteApproval: boolean;
@@ -54,7 +53,6 @@ export type FarmState = {
   setLiquidityTokenInput: (value: string) => void;
   setRemoveLiquidityInput: (value: string) => void;
   setStakeInput: (value: string) => void;
-  setWithdrawInput: (value: string) => void;
   refreshData: () => Promise<void>;
   approveTokenForRouter: () => Promise<void>;
   approveQuoteTokenForRouter: () => Promise<void>;
@@ -65,9 +63,7 @@ export type FarmState = {
   stakeLp: () => Promise<void>;
   withdrawLp: () => Promise<void>;
   claimRewards: () => Promise<void>;
-  exitFarm: () => Promise<void>;
   fillMaxRemoveLiquidity: () => void;
-  fillMaxWithdraw: () => void;
 };
 
 function formatStatusError(error: unknown, fallback: string) {
@@ -200,7 +196,6 @@ export function useFarm(): FarmState {
   const [liquidityQuoteInput, setLiquidityQuoteInput] = useState("");
   const [removeLiquidityInput, setRemoveLiquidityInput] = useState("");
   const [stakeInput, setStakeInput] = useState("");
-  const [withdrawInput, setWithdrawInput] = useState("");
 
   const rewardsRead = useMemo(
     () => (provider ? getRewardsReadContract(provider, farmConfig) : null),
@@ -786,26 +781,24 @@ export function useFarm(): FarmState {
     }
 
     try {
-      const amount = parseInputToUnits(withdrawInput, farmConfig.lpDecimals);
-
-      if (amount <= 0n) {
-        setStatus("Enter a valid LP amount to withdraw.");
+      if (stakedBalance <= 0n) {
+        setStatus("No staked LP balance to withdraw.");
         return;
       }
 
       setBusy(true);
       setStatus("Submitting withdraw transaction...");
-      const tx = await rewardsWrite.withdraw(amount);
+      const tx = await rewardsWrite.withdraw(stakedBalance);
       await waitForConfirmedTransaction(tx, provider);
       setStatus("Withdraw confirmed.");
-      setWithdrawInput("");
       await refreshData();
+      await refetchWalletLpBalance();
     } catch (error) {
       setStatus(formatStatusError(error, "Withdraw failed."));
     } finally {
       setBusy(false);
     }
-  }, [refreshData, rewardsWrite, withdrawInput]);
+  }, [refreshData, refetchWalletLpBalance, rewardsWrite, stakedBalance]);
 
   const claimRewards = useCallback(async () => {
     if (!rewardsWrite) {
@@ -826,30 +819,6 @@ export function useFarm(): FarmState {
       setBusy(false);
     }
   }, [refreshData, rewardsWrite]);
-
-  const exitFarm = useCallback(async () => {
-    if (!rewardsWrite) {
-      setStatus("Connect wallet first.");
-      return;
-    }
-
-    try {
-      setBusy(true);
-      setStatus("Exiting vault: withdrawing LP and claiming rewards...");
-      const tx = await rewardsWrite.exit();
-      await waitForConfirmedTransaction(tx, provider);
-      setStatus("Exit confirmed.");
-      await refreshData();
-    } catch (error) {
-      setStatus(formatStatusError(error, "Exit failed."));
-    } finally {
-      setBusy(false);
-    }
-  }, [refreshData, rewardsWrite]);
-
-  const fillMaxWithdraw = useCallback(() => {
-    setWithdrawInput(formatUnitsSafe(stakedBalance, farmConfig.lpDecimals, 8));
-  }, [stakedBalance]);
 
   const fillMaxRemoveLiquidity = useCallback(() => {
     setRemoveLiquidityInput(formatUnitsSafe(walletLpBalance, farmConfig.lpDecimals, 8));
@@ -982,7 +951,6 @@ export function useFarm(): FarmState {
     liquidityQuoteInput,
     removeLiquidityInput,
     stakeInput,
-    withdrawInput,
     hasApproval,
     hasLiquidityTokenApproval,
     hasLiquidityQuoteApproval,
@@ -990,7 +958,6 @@ export function useFarm(): FarmState {
     setLiquidityTokenInput: handleLiquidityTokenInput,
     setRemoveLiquidityInput,
     setStakeInput,
-    setWithdrawInput,
     refreshData,
     approveTokenForRouter,
     approveQuoteTokenForRouter,
@@ -1001,8 +968,6 @@ export function useFarm(): FarmState {
     stakeLp,
     withdrawLp,
     claimRewards,
-    exitFarm,
     fillMaxRemoveLiquidity,
-    fillMaxWithdraw,
   };
 }

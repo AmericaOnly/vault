@@ -156,21 +156,14 @@ export function FarmDashboard() {
           >
             <StakePanel
               title="Withdraw / Claim"
-              label="Amount to withdraw"
-              value={farm.withdrawInput}
-              onValueChange={farm.setWithdrawInput}
-              onMax={farm.fillMaxWithdraw}
               primaryActionLabel={`Claim ${farmConfig.tokenSymbol} Rewards only`}
-              secondaryActionLabel="Withdraw LP Staking Tokens"
+              secondaryActionLabel="Withdraw Entire Vault Step 1"
               onPrimaryAction={farm.claimRewards}
               onSecondaryAction={farm.withdrawLp}
               primaryDisabled={farm.busy || !farm.account}
               secondaryDisabled={farm.busy || !farm.account}
               primaryVariant="default"
               secondaryVariant="secondary"
-              footerActionLabel="Exit Vault"
-              onFooterAction={farm.exitFarm}
-              footerDisabled={farm.busy || !farm.account}
             />
           </motion.div>
           </div>
