@@ -711,6 +711,7 @@ export function useFarm(): FarmState {
       await waitForConfirmedTransaction(tx, provider);
       setStatus(`Liquidity removed. ${farmConfig.tokenSymbol} and ${farmConfig.quoteTokenSymbol} returned to your wallet.`);
       await refreshData();
+      await refetchWalletLpBalance();
     } catch (error) {
       setStatus(formatStatusError(error, "Remove liquidity failed."));
     } finally {
@@ -722,6 +723,7 @@ export function useFarm(): FarmState {
     pairLiquiditySupply,
     pairTokenReserve,
     refreshData,
+    refetchWalletLpBalance,
     v2RouterWrite,
     hasRemoveLiquidityApproval,
     walletLpBalance,

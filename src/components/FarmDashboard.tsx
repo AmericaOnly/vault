@@ -20,13 +20,14 @@ import {
 export function FarmDashboard() {
   const farmConfig = useFarmConfig();
   const farm = useFarm();
+  const totalUserLpBalance = farm.walletLpBalance + farm.stakedBalance;
   const vaultTokenAmount =
     farm.pairLiquiditySupply > 0n
-      ? (farm.stakedBalance * farm.pairTokenReserve) / farm.pairLiquiditySupply
+      ? (totalUserLpBalance * farm.pairTokenReserve) / farm.pairLiquiditySupply
       : 0n;
   const vaultQuoteAmount =
     farm.pairLiquiditySupply > 0n
-      ? (farm.stakedBalance * farm.pairQuoteReserve) / farm.pairLiquiditySupply
+      ? (totalUserLpBalance * farm.pairQuoteReserve) / farm.pairLiquiditySupply
       : 0n;
 
   useEffect(() => {
