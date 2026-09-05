@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 type MetricCardProps = {
   icon: ReactNode;
   title: string;
-  value: string;
+  value: ReactNode;
   subtitle: string;
   delay?: number;
 };

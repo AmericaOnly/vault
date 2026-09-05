@@ -42,6 +42,7 @@ export type FarmState = {
   totalStaked: bigint;
   pairTokenReserve: bigint;
   pairQuoteReserve: bigint;
+  pairLiquiditySupply: bigint;
   liquidityTokenInput: string;
   liquidityQuoteInput: string;
   removeLiquidityInput: string;
@@ -946,6 +947,7 @@ export function useFarm(): FarmState {
     totalStaked,
     pairTokenReserve,
     pairQuoteReserve,
+    pairLiquiditySupply,
     liquidityTokenInput,
     liquidityQuoteInput,
     removeLiquidityInput,

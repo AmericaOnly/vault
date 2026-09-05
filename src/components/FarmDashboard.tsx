@@ -20,6 +20,14 @@ import {
 export function FarmDashboard() {
   const farmConfig = useFarmConfig();
   const farm = useFarm();
+  const vaultTokenAmount =
+    farm.pairLiquiditySupply > 0n
+      ? (farm.stakedBalance * farm.pairTokenReserve) / farm.pairLiquiditySupply
+      : 0n;
+  const vaultQuoteAmount =
+    farm.pairLiquiditySupply > 0n
+      ? (farm.stakedBalance * farm.pairQuoteReserve) / farm.pairLiquiditySupply
+      : 0n;
 
   useEffect(() => {
     if (farm.liquidityAddedCount === 0) {
@@ -85,9 +93,20 @@ export function FarmDashboard() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <MetricCard
             icon={<Droplets className="h-5 w-5" />}
-            title="Staked LP"
-            value={formatUnitsSafe(farm.stakedBalance, farmConfig.lpDecimals)}
-            subtitle="Deposited in vault"
+            title="In Your Vault"
+            value={(
+              <div className="grid gap-2">
+                <div>
+                  {formatUnitsSafe(vaultTokenAmount, farmConfig.tokenDecimals)}{" "}
+                  <span className="text-base text-slate-300">{farmConfig.tokenSymbol}</span>
+                </div>
+                <div>
+                  {formatUnitsSafe(vaultQuoteAmount, farmConfig.quoteTokenDecimals)}{" "}
+                  <span className="text-base text-slate-300">{farmConfig.quoteTokenSymbol}</span>
+                </div>
+              </div>
+            )}
+            subtitle="Estimated from current pool reserves • Updates every 15 seconds"
             delay={0}
           />
           <MetricCard
