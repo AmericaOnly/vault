@@ -45,7 +45,7 @@ export function LiquidityPanel({
       <Card className="relative overflow-hidden">
         <div className="pointer-events-none absolute right-0 top-0 h-36 w-36 rounded-full bg-blue-200/8 blur-3xl" />
         <CardHeader>
-          <CardTitle className="text-lg sm:text-xl">Add {tokenSymbol}/{quoteTokenSymbol} Liquidity</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">Part 1 - Add {tokenSymbol}/{quoteTokenSymbol} Liquidity</CardTitle>
           <p className="text-sm text-slate-200">
             Here you can add to the liquidity pool, in order to get LP Stake tokens for
             earning {tokenSymbol} rewards with. After these 3 steps are complete,

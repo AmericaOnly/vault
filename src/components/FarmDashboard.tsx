@@ -56,6 +56,32 @@ export function FarmDashboard() {
 
         <div className={farmConfig.theme.sectionClassName}>
           <div className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-slate-100/92">
+            Vault Performance
+          </div>
+          <div className="mb-5 max-w-3xl text-sm text-slate-200/80">
+            Track your wallet LP tokens staked in the vault and your earned rewards from staking,
+            updated roughly every 10 seconds.
+          </div>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <MetricCard
+            icon={<Droplets className="h-5 w-5" />}
+            title="Staked LP"
+            value={formatUnitsSafe(farm.stakedBalance, farmConfig.lpDecimals)}
+            subtitle="Deposited in vault"
+            delay={0}
+          />
+          <MetricCard
+            icon={<Gift className="h-5 w-5" />}
+            title="Earned Rewards"
+            value={formatUnitsSafe(farm.earnedRewards, farmConfig.tokenDecimals)}
+            subtitle={farmConfig.tokenSymbol}
+            delay={0.05}
+          />
+        </div>
+
+        <div className={farmConfig.theme.sectionClassName}>
+          <div className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-slate-100/92">
             Liquidity Flow
           </div>
           <div className="mb-5 max-w-3xl text-sm text-slate-200/80">
@@ -89,32 +115,6 @@ export function FarmDashboard() {
 
         <div className={farmConfig.theme.sectionClassName}>
           <div className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-slate-100/92">
-            Vault Performance
-          </div>
-          <div className="mb-5 max-w-3xl text-sm text-slate-200/80">
-            Track your wallet LP tokens staked in the vault and your earned rewards from staking,
-            updated roughly every 10 seconds.
-          </div>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <MetricCard
-            icon={<Droplets className="h-5 w-5" />}
-            title="Staked LP"
-            value={formatUnitsSafe(farm.stakedBalance, farmConfig.lpDecimals)}
-            subtitle="Deposited in vault"
-            delay={0}
-          />
-          <MetricCard
-            icon={<Gift className="h-5 w-5" />}
-            title="Earned Rewards"
-            value={formatUnitsSafe(farm.earnedRewards, farmConfig.tokenDecimals)}
-            subtitle={farmConfig.tokenSymbol}
-            delay={0.05}
-          />
-        </div>
-
-        <div className={farmConfig.theme.sectionClassName}>
-          <div className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-slate-100/92">
             Position Controls
           </div>
           <div className="mb-5 max-w-3xl text-sm text-slate-200/80">
@@ -140,7 +140,7 @@ export function FarmDashboard() {
           <div className="grid gap-6 lg:grid-cols-2">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <StakePanel
-              title="Stake LP"
+              title="Part 2 - Stake LP"
               label="Amount to stake"
               value={farm.stakeInput}
               onValueChange={farm.setStakeInput}
