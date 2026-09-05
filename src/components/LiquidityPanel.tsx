@@ -84,11 +84,11 @@ export function LiquidityPanel({
             >
               {hasTokenApproval ? (
                 <>
-                  <strong>Step 1.</strong>&nbsp;{tokenSymbol} Approved
+                  <strong>Step 1.</strong>&nbsp;{tokenSymbol} Deposit Approved
                 </>
               ) : (
                 <>
-                  <strong>Step 1.</strong>&nbsp;Approve {tokenSymbol}
+                  <strong>Step 1.</strong>&nbsp;Approve {tokenSymbol} Deposit for Vault
                 </>
               )}
             </Button>
@@ -100,11 +100,11 @@ export function LiquidityPanel({
             >
               {hasQuoteApproval ? (
                 <>
-                  <strong>Step 2.</strong>&nbsp;{quoteTokenSymbol} Approved
+                  <strong>Step 2.</strong>&nbsp;{quoteTokenSymbol} Deposit Approved
                 </>
               ) : (
                 <>
-                  <strong>Step 2.</strong>&nbsp;Approve {quoteTokenSymbol}
+                  <strong>Step 2.</strong>&nbsp;Approve {quoteTokenSymbol} Deposit for Vault
                 </>
               )}
             </Button>
@@ -113,7 +113,7 @@ export function LiquidityPanel({
               disabled={busy || !connected || !hasTokenApproval || !hasQuoteApproval}
               className="h-auto min-h-11 w-full whitespace-normal py-3 text-center sm:col-span-2 lg:col-span-1"
             >
-              <strong>Step 3.</strong>&nbsp;Add Liquidity
+              <strong>Step 3.</strong>&nbsp;Place {tokenSymbol}/{quoteTokenSymbol} into Vault
             </Button>
           </div>
         </CardContent>
