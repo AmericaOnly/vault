@@ -45,14 +45,12 @@ export type FarmState = {
   pairLiquiditySupply: bigint;
   liquidityTokenInput: string;
   liquidityQuoteInput: string;
-  removeLiquidityInput: string;
   stakeInput: string;
   hasApproval: boolean;
   hasLiquidityTokenApproval: boolean;
   hasLiquidityQuoteApproval: boolean;
   hasRemoveLiquidityApproval: boolean;
   setLiquidityTokenInput: (value: string) => void;
-  setRemoveLiquidityInput: (value: string) => void;
   refreshData: () => Promise<void>;
   approveTokenForRouter: () => Promise<void>;
   approveQuoteTokenForRouter: () => Promise<void>;
@@ -63,7 +61,6 @@ export type FarmState = {
   stakeLp: () => Promise<void>;
   withdrawLp: () => Promise<void>;
   claimRewards: () => Promise<void>;
-  fillMaxRemoveLiquidity: () => void;
 };
 
 function formatStatusError(error: unknown, fallback: string) {
@@ -194,7 +191,6 @@ export function useFarm(): FarmState {
 
   const [liquidityTokenInput, setLiquidityTokenInput] = useState("");
   const [liquidityQuoteInput, setLiquidityQuoteInput] = useState("");
-  const [removeLiquidityInput, setRemoveLiquidityInput] = useState("");
   const [stakeInput, setStakeInput] = useState("");
 
   const rewardsRead = useMemo(
@@ -458,18 +454,12 @@ export function useFarm(): FarmState {
     liquidityQuoteInput || "0",
     farmConfig.quoteTokenDecimals,
   );
-  const requiredRemoveLiquidityApproval = parseInputToUnitsSafe(
-    removeLiquidityInput || "0",
-    farmConfig.lpDecimals,
-  );
   const hasLiquidityTokenApproval =
     requiredTokenApproval === 0n || tokenAllowanceToRouter >= requiredTokenApproval;
   const hasLiquidityQuoteApproval =
     requiredQuoteApproval === 0n || quoteTokenAllowanceToRouter >= requiredQuoteApproval;
   const hasLpRouterApproval = lpAllowanceToRouter > 0n;
-  const hasRemoveLiquidityApproval =
-    hasLpRouterApproval &&
-    (requiredRemoveLiquidityApproval === 0n || lpAllowanceToRouter >= requiredRemoveLiquidityApproval);
+  const hasRemoveLiquidityApproval = hasLpRouterApproval;
 
   const approveLp = useCallback(async () => {
     if (!lpWrite) {
@@ -667,10 +657,8 @@ export function useFarm(): FarmState {
     }
 
     try {
-      const liquidity = parseInputToUnits(removeLiquidityInput, farmConfig.lpDecimals);
-
-      if (liquidity <= 0n) {
-        setStatus("Enter a valid LP amount to remove.");
+      if (walletLpBalance <= 0n) {
+        setStatus("No LP balance is available to withdraw.");
         return;
       }
 
@@ -679,18 +667,13 @@ export function useFarm(): FarmState {
         return;
       }
 
-      if (liquidity > walletLpBalance) {
-        setStatus(`Insufficient ${farmConfig.lpSymbol} balance in your wallet to remove that amount.`);
-        return;
-      }
-
       const slippageBps = BigInt(farmConfig.liquiditySlippageBps);
       let amountTokenMin = 0n;
       let amountQuoteMin = 0n;
 
       if (pairLiquiditySupply > 0n && pairTokenReserve > 0n && pairQuoteReserve > 0n) {
-        const expectedTokenOut = (liquidity * pairTokenReserve) / pairLiquiditySupply;
-        const expectedQuoteOut = (liquidity * pairQuoteReserve) / pairLiquiditySupply;
+        const expectedTokenOut = (walletLpBalance * pairTokenReserve) / pairLiquiditySupply;
+        const expectedQuoteOut = (walletLpBalance * pairQuoteReserve) / pairLiquiditySupply;
         amountTokenMin = (expectedTokenOut * (10000n - slippageBps)) / 10000n;
         amountQuoteMin = (expectedQuoteOut * (10000n - slippageBps)) / 10000n;
       }
@@ -708,7 +691,7 @@ export function useFarm(): FarmState {
               farmConfig.tokenAddress,
               farmConfig.quoteTokenAddress,
               farmConfig.poolStable,
-              liquidity,
+              walletLpBalance,
               amountTokenMin,
               amountQuoteMin,
               account,
@@ -717,7 +700,7 @@ export function useFarm(): FarmState {
           : [
               farmConfig.tokenAddress,
               farmConfig.quoteTokenAddress,
-              liquidity,
+              walletLpBalance,
               amountTokenMin,
               amountQuoteMin,
               account,
@@ -727,7 +710,6 @@ export function useFarm(): FarmState {
 
       await waitForConfirmedTransaction(tx, provider);
       setStatus(`Liquidity removed. ${farmConfig.tokenSymbol} and ${farmConfig.quoteTokenSymbol} returned to your wallet.`);
-      setRemoveLiquidityInput("");
       await refreshData();
     } catch (error) {
       setStatus(formatStatusError(error, "Remove liquidity failed."));
@@ -740,7 +722,6 @@ export function useFarm(): FarmState {
     pairLiquiditySupply,
     pairTokenReserve,
     refreshData,
-    removeLiquidityInput,
     v2RouterWrite,
     hasRemoveLiquidityApproval,
     walletLpBalance,
@@ -819,10 +800,6 @@ export function useFarm(): FarmState {
       setBusy(false);
     }
   }, [refreshData, rewardsWrite]);
-
-  const fillMaxRemoveLiquidity = useCallback(() => {
-    setRemoveLiquidityInput(formatUnitsSafe(walletLpBalance, farmConfig.lpDecimals, 8));
-  }, [walletLpBalance]);
 
   useEffect(() => {
     if (!account) {
@@ -950,14 +927,12 @@ export function useFarm(): FarmState {
     pairLiquiditySupply,
     liquidityTokenInput,
     liquidityQuoteInput,
-    removeLiquidityInput,
     stakeInput,
     hasApproval,
     hasLiquidityTokenApproval,
     hasLiquidityQuoteApproval,
     hasRemoveLiquidityApproval,
     setLiquidityTokenInput: handleLiquidityTokenInput,
-    setRemoveLiquidityInput,
     refreshData,
     approveTokenForRouter,
     approveQuoteTokenForRouter,
@@ -968,6 +943,5 @@ export function useFarm(): FarmState {
     stakeLp,
     withdrawLp,
     claimRewards,
-    fillMaxRemoveLiquidity,
   };
 }

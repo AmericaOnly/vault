@@ -188,14 +188,9 @@ export function FarmDashboard() {
         <StatusAlert status={farm.status} />
 
         <RemoveLiquidityPanel
-          lpBalance={formatUnitsSafe(farm.walletLpBalance, farmConfig.lpDecimals)}
-          lpSymbol={farmConfig.lpSymbol}
-          value={farm.removeLiquidityInput}
           busy={farm.busy}
           connected={Boolean(farm.account)}
           hasApproval={farm.hasRemoveLiquidityApproval}
-          onValueChange={farm.setRemoveLiquidityInput}
-          onMax={farm.fillMaxRemoveLiquidity}
           onApprove={farm.approveLpForRouter}
           onRemove={farm.removeLiquidity}
         />
