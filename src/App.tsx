@@ -81,9 +81,7 @@ export default function App() {
   return (
     <>
       <Navbar
-        currentPath={pathname}
         onNavigate={navigate}
-        farms={farmList}
       />
       {activeFarm ? (
         <FarmProvider config={activeFarm}>
