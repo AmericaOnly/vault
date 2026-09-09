@@ -1,7 +1,9 @@
-import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+import { getDefaultConfig, type Wallet } from "@rainbow-me/rainbowkit";
 import { coinbaseWallet, injectedWallet, metaMaskWallet, trustWallet, uniswapWallet, walletConnectWallet } from "@rainbow-me/rainbowkit/wallets";
-import { fallback, http } from "wagmi";
+import { createConnector, fallback, http } from "wagmi";
 import { base } from "wagmi/chains";
+import { injected } from "wagmi/connectors";
+import type { EIP1193Provider } from "viem";
 
 type Eip6963Announcement = {
   info?: {
@@ -10,8 +12,29 @@ type Eip6963Announcement = {
     icon?: string;
     rdns?: string;
   };
-  provider?: { request?: unknown };
+  provider?: EIP1193Provider;
 };
+
+let taotBaseProvider: Eip6963Announcement["provider"];
+
+const taotBaseWallet = (): Wallet => ({
+  id: "taotBaseWallet",
+  name: "TAOT Base Wallet",
+  rdns: "com.buytaot.app",
+  iconUrl: `${import.meta.env.BASE_URL}images/taot.png`,
+  iconBackground: "#020617",
+  createConnector: (walletDetails) =>
+    createConnector((config) => ({
+      ...injected({
+        target: () => ({
+          id: "com.buytaot.app",
+          name: "TAOT Base Wallet",
+          provider: taotBaseProvider as NonNullable<typeof taotBaseProvider>,
+        }),
+      })(config),
+      ...walletDetails,
+    })),
+});
 
 type WalletDiagnostic = {
   rawAnnouncements: Array<Record<string, unknown>>;
@@ -29,6 +52,9 @@ if (typeof window !== "undefined") {
 
   window.addEventListener("eip6963:announceProvider", (event) => {
     const detail = (event as CustomEvent<Eip6963Announcement>).detail;
+    if (detail?.info?.rdns === "com.buytaot.app" && detail.provider) {
+      taotBaseProvider = detail.provider;
+    }
     const announcement = {
       uuid: detail?.info?.uuid,
       name: detail?.info?.name,
@@ -59,7 +85,7 @@ export const wagmiConfig = getDefaultConfig({
   appUrl: "https://buytaot.com/",
   projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || "YOUR_WALLETCONNECT_PROJECT_ID",
   chains: [base], transports: { [base.id]: baseTransport },
-  wallets: [{ groupName: "Recommended", wallets: [metaMaskWallet, uniswapWallet, trustWallet, coinbaseWallet, walletConnectWallet, injectedWallet] }],
+  wallets: [{ groupName: "Recommended", wallets: [taotBaseWallet, metaMaskWallet, uniswapWallet, trustWallet, coinbaseWallet, walletConnectWallet, injectedWallet] }],
   ssr: false,
 });
 
