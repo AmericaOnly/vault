@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -41,20 +41,34 @@ export function LiquidityPanel({
   onApproveQuoteToken,
   onAddLiquidity,
 }: LiquidityPanelProps) {
-  const [hasEditedTokenAmount, setHasEditedTokenAmount] = useState(false);
   const [showInsufficientQuoteDialog, setShowInsufficientQuoteDialog] = useState(false);
+  const latestInsufficientQuoteBalance = useRef(hasInsufficientQuoteBalance);
+  const validationTimer = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!hasEditedTokenAmount) {
-      return;
-    }
+    latestInsufficientQuoteBalance.current = hasInsufficientQuoteBalance;
+  }, [hasInsufficientQuoteBalance]);
 
-    setShowInsufficientQuoteDialog(hasInsufficientQuoteBalance);
-  }, [hasEditedTokenAmount, hasInsufficientQuoteBalance]);
+  useEffect(() => () => {
+    if (validationTimer.current !== null) {
+      window.clearTimeout(validationTimer.current);
+    }
+  }, []);
 
   function handleTokenValueChange(value: string) {
-    setHasEditedTokenAmount(true);
     onTokenValueChange(value);
+    if (validationTimer.current !== null) {
+      window.clearTimeout(validationTimer.current);
+    }
+    if (!value.trim()) {
+      setShowInsufficientQuoteDialog(false);
+      validationTimer.current = null;
+      return;
+    }
+    validationTimer.current = window.setTimeout(() => {
+      setShowInsufficientQuoteDialog(latestInsufficientQuoteBalance.current);
+      validationTimer.current = null;
+    }, 500);
   }
 
   return (
@@ -73,7 +87,7 @@ export function LiquidityPanel({
               </CardTitle>
               <p className="text-sm leading-6 text-slate-200">
                 This {tokenSymbol} amount requires approximately {quoteValue} {quoteTokenSymbol},
-                but your wallet has {quoteTokenBalance} {quoteTokenSymbol}. Enter a smaller {tokenSymbol} amount.
+                but your wallet has {quoteTokenBalance} {quoteTokenSymbol}. Please lower the amount of {tokenSymbol}.
               </p>
             </CardHeader>
             <CardContent>

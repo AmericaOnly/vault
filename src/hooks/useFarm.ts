@@ -806,14 +806,6 @@ export function useFarm(): FarmState {
   }, [refreshData, rewardsWrite]);
 
   useEffect(() => {
-    if (!account) {
-      return;
-    }
-
-    setLiquidityTokenInput(formatUnitsSafe(walletTokenBalance, farmConfig.tokenDecimals, 8));
-  }, [account, walletTokenBalance]);
-
-  useEffect(() => {
     if (isOnFarmChain) {
       return;
     }
